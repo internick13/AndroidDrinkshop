@@ -2,7 +2,7 @@ package galosoft.com.androiddrinkshop.Model;
 
 public class CheckUserResponse {
 
-    private boolean exists;
+    private  boolean exists;
     private String error_msg;
 
     public CheckUserResponse() {
