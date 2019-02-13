@@ -30,7 +30,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import dmax.dialog.SpotsDialog;
-import galosoft.com.androiddrinkshop.Interface.IDrinkShopAPI;
+import galosoft.com.androiddrinkshop.Retrofit.IDrinkShopAPI;
 import galosoft.com.androiddrinkshop.Model.CheckUserResponse;
 import galosoft.com.androiddrinkshop.Model.User;
 import galosoft.com.androiddrinkshop.Utils.Common;
@@ -171,7 +171,9 @@ public class MainActivity extends AppCompatActivity {
                                         mService.getUserInformation(account.getPhoneNumber().toString()).enqueue(new Callback<User>() {
                                             @Override
                                             public void onResponse(Call<User> call, Response<User> response) {
+
                                                 alertDialog.dismiss();
+                                                Common.currentUser = response.body();
                                                 startActivity(new Intent(MainActivity.this, HomeActivity.class));
                                                 finish();
                                             }

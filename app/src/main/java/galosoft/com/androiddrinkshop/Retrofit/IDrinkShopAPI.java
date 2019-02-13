@@ -1,10 +1,17 @@
-package galosoft.com.androiddrinkshop.Interface;
+package galosoft.com.androiddrinkshop.Retrofit;
 
+import java.util.List;
+
+import galosoft.com.androiddrinkshop.Model.Banner;
+import galosoft.com.androiddrinkshop.Model.Category;
 import galosoft.com.androiddrinkshop.Model.CheckUserResponse;
+import galosoft.com.androiddrinkshop.Model.Drink;
 import galosoft.com.androiddrinkshop.Model.User;
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface IDrinkShopAPI {
@@ -21,8 +28,18 @@ public interface IDrinkShopAPI {
                                @Field("birthdate") String birthdate);
 
     @FormUrlEncoded
+    @POST("getdrink.php")
+    Observable<List<Drink>> getDrink(@Field("menuId") String menuID);
+
+    @FormUrlEncoded
     @POST("getuser.php")
     Call<User> getUserInformation(@Field("phone") String phone);
+
+    @GET("getbanner.php")
+    Observable<List<Banner>> getBanners();
+
+    @GET("getmenu.php")
+    Observable<List<Category>> getMenu();
 
 
 }

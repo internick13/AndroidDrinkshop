@@ -3,6 +3,8 @@ package galosoft.com.androiddrinkshop;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,12 +16,34 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+
+import java.util.HashMap;
+import java.util.List;
+
+import galosoft.com.androiddrinkshop.Adapter.CategoryAdapter;
+import galosoft.com.androiddrinkshop.Retrofit.IDrinkShopAPI;
+import galosoft.com.androiddrinkshop.Model.Banner;
+import galosoft.com.androiddrinkshop.Model.Category;
 import galosoft.com.androiddrinkshop.Utils.Common;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     TextView txt_name, txt_phone;
+    SliderLayout sliderLayout;
+    IDrinkShopAPI mService;
+
+    RecyclerView lst_menu;
+
+    //RX java
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +51,13 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mService = Common.getAPI();
+        lst_menu = findViewById(R.id.lst_menu);
+        sliderLayout = findViewById(R.id.slider);
+        lst_menu.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        lst_menu.setHasFixedSize(true);
+        
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +85,62 @@ public class HomeActivity extends AppCompatActivity
         txt_name.setText(Common.currentUser.getName());
         txt_phone.setText(Common.currentUser.getPhone());
 
+        //getBanner
+        getBannerImage();
+        
+        //Get Menu
+        getMenu();
+
+
+    }
+
+    private void getMenu() {
+        compositeDisposable.add(mService.getMenu()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Category>>() {
+                    @Override
+                    public void accept(List<Category> categories) throws Exception {
+                        displayMenu(categories);
+                    }
+                }));
+    }
+
+    private void displayMenu(List<Category> categories) {
+
+        CategoryAdapter adapter = new CategoryAdapter(this, categories);
+        lst_menu.setAdapter(adapter);
+
+    }
+
+    private void getBannerImage() {
+        compositeDisposable.add(mService.getBanners()
+                           .subscribeOn(Schedulers.io())
+                           .observeOn(AndroidSchedulers.mainThread())
+                           .subscribe(new Consumer<List<Banner>>() {
+                               @Override
+                               public void accept(List<Banner> banners) throws Exception {
+                                    displayImage(banners);
+                               }
+                           }));
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
+    }
+
+    private void displayImage(List<Banner> banners) {
+        HashMap<String,String> bannerMap =  new HashMap<>();
+        for(Banner item:banners)
+            bannerMap.put(item.getName(), item.getLink());
+
+        for(String name:bannerMap.keySet()) {
+            TextSliderView textSliderView = new TextSliderView(this);
+            textSliderView.description(name).image(bannerMap.get(name)).setScaleType(BaseSliderView.ScaleType.Fit);
+            sliderLayout.addSlider(textSliderView);
+        }
 
     }
 
