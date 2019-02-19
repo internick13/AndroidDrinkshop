@@ -3,6 +3,8 @@ package galosoft.com.androiddrinkshop.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import galosoft.com.androiddrinkshop.Database.DataSource.CartRepository;
+import galosoft.com.androiddrinkshop.Database.Local.CartDatabase;
 import galosoft.com.androiddrinkshop.Model.Category;
 import galosoft.com.androiddrinkshop.Model.Drink;
 import galosoft.com.androiddrinkshop.Retrofit.IDrinkShopAPI;
@@ -26,6 +28,10 @@ public class Common {
     public static int sizeOfCup = -1; //-1 error, 0 M, 1 L
     public static  int sugar = -1;
     public static  int ice = -1;
+
+    //Database
+    public static CartDatabase cartDatabase;
+    public static CartRepository cartRepository;
 
     public static IDrinkShopAPI getAPI() {
         return RetrofitClient.getClient(BASE_URL).create(IDrinkShopAPI.class);

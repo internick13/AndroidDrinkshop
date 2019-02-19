@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import galosoft.com.androiddrinkshop.Adapter.CategoryAdapter;
+import galosoft.com.androiddrinkshop.Database.DataSource.CartRepository;
+import galosoft.com.androiddrinkshop.Database.Local.CartDataSource;
+import galosoft.com.androiddrinkshop.Database.Local.CartDatabase;
 import galosoft.com.androiddrinkshop.Model.Drink;
 import galosoft.com.androiddrinkshop.Retrofit.IDrinkShopAPI;
 import galosoft.com.androiddrinkshop.Model.Banner;
@@ -95,6 +98,14 @@ public class HomeActivity extends AppCompatActivity
         //save topping list
         getToppingList();
 
+        //Init database
+        initDB();
+
+    }
+
+    private void initDB() {
+        Common.cartDatabase = CartDatabase.getInstance(this);
+        Common.cartRepository = CartRepository.getInstance(CartDataSource.getInstance(Common.cartDatabase.cartDAO()));
     }
 
     private void getToppingList() {
