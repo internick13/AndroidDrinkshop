@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import galosoft.com.androiddrinkshop.Adapter.CategoryAdapter;
+import galosoft.com.androiddrinkshop.Model.Drink;
 import galosoft.com.androiddrinkshop.Retrofit.IDrinkShopAPI;
 import galosoft.com.androiddrinkshop.Model.Banner;
 import galosoft.com.androiddrinkshop.Model.Category;
@@ -91,6 +92,21 @@ public class HomeActivity extends AppCompatActivity
         //Get Menu
         getMenu();
 
+        //save topping list
+        getToppingList();
+
+    }
+
+    private void getToppingList() {
+        compositeDisposable.add(mService.getDrink(Common.TOPPING_MENU_ID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<List<Drink>>() {
+                    @Override
+                    public void accept(List<Drink> drinks) throws Exception {
+                        Common.toppingList = drinks;
+                    }
+                }));
 
     }
 
