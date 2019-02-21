@@ -5,15 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/drink_shop_bg"
-    tools:context=".MainActivity">
+    android:background="@drawable/bg"
+    android:padding="8dp"
+    tools:context=".CartActivity">
 
     <Button
-        android:id="@+id/btn_continue"
-        android:text="Continue"
+        android:id="@+id/btn_place_order"
+        android:text="Place Order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_margin="8dp"
         android:background="@color/colorPrimaryDark" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_cart"
+        android:layout_above="@+id/btn_place_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>
