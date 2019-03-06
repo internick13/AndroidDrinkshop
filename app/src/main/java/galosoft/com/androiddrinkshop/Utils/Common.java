@@ -13,7 +13,7 @@ import galosoft.com.androiddrinkshop.Model.User;
 
 public class Common {
     //In emulator local hos is 10.0.2.2
-    private static final String BASE_URL = "http://10.0.2.2:8080/drinkshop/";
+    public static final String BASE_URL = "http://10.0.2.2:8080/drinkshop/";
     public static final String TOPPING_MENU_ID = "7";
 
     public static User currentUser = null;
