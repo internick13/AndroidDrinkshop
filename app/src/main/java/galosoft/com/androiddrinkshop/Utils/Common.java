@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import galosoft.com.androiddrinkshop.Database.DataSource.CartRepository;
-import galosoft.com.androiddrinkshop.Database.Local.CartDatabase;
+import galosoft.com.androiddrinkshop.Database.DataSource.FavoriteRepository;
+import galosoft.com.androiddrinkshop.Database.Local.EDTMRoomDatabase;
 import galosoft.com.androiddrinkshop.Model.Category;
 import galosoft.com.androiddrinkshop.Model.Drink;
 import galosoft.com.androiddrinkshop.Retrofit.IDrinkShopAPI;
@@ -30,8 +31,9 @@ public class Common {
     public static  int ice = -1;
 
     //Database
-    public static CartDatabase cartDatabase;
+    public static EDTMRoomDatabase edtmRoomDatabase;
     public static CartRepository cartRepository;
+    public static FavoriteRepository favoriteRepository;
 
     public static IDrinkShopAPI getAPI() {
         return RetrofitClient.getClient(BASE_URL).create(IDrinkShopAPI.class);

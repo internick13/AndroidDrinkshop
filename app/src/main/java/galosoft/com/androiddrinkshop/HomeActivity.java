@@ -1,6 +1,8 @@
 package galosoft.com.androiddrinkshop;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.facebook.accountkit.AccountKit;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.squareup.picasso.Picasso;
@@ -36,8 +39,10 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import galosoft.com.androiddrinkshop.Adapter.CategoryAdapter;
 import galosoft.com.androiddrinkshop.Database.DataSource.CartRepository;
+import galosoft.com.androiddrinkshop.Database.DataSource.FavoriteRepository;
 import galosoft.com.androiddrinkshop.Database.Local.CartDataSource;
-import galosoft.com.androiddrinkshop.Database.Local.CartDatabase;
+import galosoft.com.androiddrinkshop.Database.Local.EDTMRoomDatabase;
+import galosoft.com.androiddrinkshop.Database.Local.FavoriteDataSource;
 import galosoft.com.androiddrinkshop.Model.Drink;
 import galosoft.com.androiddrinkshop.Retrofit.IDrinkShopAPI;
 import galosoft.com.androiddrinkshop.Model.Banner;
@@ -193,8 +198,9 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void initDB() {
-        Common.cartDatabase = CartDatabase.getInstance(this);
-        Common.cartRepository = CartRepository.getInstance(CartDataSource.getInstance(Common.cartDatabase.cartDAO()));
+        Common.edtmRoomDatabase = EDTMRoomDatabase.getInstance(this);
+        Common.cartRepository = CartRepository.getInstance(CartDataSource.getInstance(Common.edtmRoomDatabase.cartDAO()));
+        Common.favoriteRepository = FavoriteRepository.getInstance(FavoriteDataSource.getInstance(Common.edtmRoomDatabase.favoriteDAO()));
     }
 
     private void getToppingList() {
@@ -260,13 +266,21 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    //Exit app when click back button
+    boolean isBackButtonClicked = false;
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if(isBackButtonClicked){
+                super.onBackPressed();
+                return;
+            }
+            this.isBackButtonClicked = true;
+            Toast.makeText(this, "Click in back button again to exit...", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -311,6 +325,8 @@ public class HomeActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.cart_menu) {
+            //Create confirm dialog
+
             return true;
         }
 
@@ -323,18 +339,30 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_sign_out) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Exit");
+            builder.setMessage("Do you want to leave?");
 
-        } else if (id == R.id.nav_slideshow) {
+            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    AccountKit.logOut();
+                    Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
-        } else if (id == R.id.nav_manage) {
+            builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                 dialogInterface.dismiss();
+                }
+            });
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            builder.show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -346,6 +374,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         updateCartCount();
+        isBackButtonClicked = false;
     }
 
     @Override
