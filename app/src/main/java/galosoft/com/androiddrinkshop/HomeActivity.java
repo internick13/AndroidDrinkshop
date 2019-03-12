@@ -363,6 +363,8 @@ public class HomeActivity extends AppCompatActivity
             });
 
             builder.show();
+        } else if(id == R.id.nav_favorite) {
+            startActivity(new Intent(HomeActivity.this, FavoriteListActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

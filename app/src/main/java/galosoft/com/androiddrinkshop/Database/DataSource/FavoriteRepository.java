@@ -34,4 +34,39 @@ public class FavoriteRepository implements IFavoriteDataSource{
     public void delete(Favorite favorite) {
         favoriteDataSource.delete(favorite);
     }
+
+    @Override
+    public void insertFav(Favorite... favorites) {
+        favoriteDataSource.insertFav(favorites);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

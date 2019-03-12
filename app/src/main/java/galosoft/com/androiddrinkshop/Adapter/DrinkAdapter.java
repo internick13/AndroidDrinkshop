@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import galosoft.com.androiddrinkshop.Database.ModelDB.Cart;
+import galosoft.com.androiddrinkshop.Database.ModelDB.Favorite;
 import galosoft.com.androiddrinkshop.Interface.ItemClickListener;
 import galosoft.com.androiddrinkshop.Model.Drink;
 import galosoft.com.androiddrinkshop.R;
@@ -48,7 +49,7 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DrinkViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final DrinkViewHolder holder, final int position) {
         holder.txt_price.setText(new StringBuilder("$").append(drinkList.get(position).Price).toString());
         holder.txt_drink_name.setText(drinkList.get(position).Name);
 
@@ -67,7 +68,42 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder>{
                 Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show();
             }
         });
+
+        //Favorite System
+        if(Common.favoriteRepository.isFavorite(Integer.parseInt(drinkList.get(position).ID)) == 1)
+            holder.btn_favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+        else
+            holder.btn_favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+
+        holder.btn_favorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(Common.favoriteRepository.isFavorite(Integer.parseInt(drinkList.get(position).ID)) != 1) {
+                    addOrRemoveFavorite(drinkList.get(position), true);
+                    holder.btn_favorites.setImageResource(R.drawable.ic_favorite_black_24dp);
+                } else {
+                    //removeFavorite(drinkList.get(position), false);
+                    holder.btn_favorites.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                }
+            }
+        });
     }
+
+    private void addOrRemoveFavorite(Drink drink, boolean isAdd) {
+
+        Favorite favorite = new Favorite();
+        favorite.id = drink.ID;
+        favorite.link = drink.Link;
+        favorite.name = drink.Name;
+        favorite.price = drink.Price;
+        favorite.menuId = drink.MenuId;
+
+        if(isAdd)
+            Common.favoriteRepository.insertFav(favorite);
+        else
+            Common.favoriteRepository.delete(favorite);
+    }
+
 
     private void showAddToCartDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -298,3 +334,15 @@ public class DrinkAdapter extends RecyclerView.Adapter<DrinkViewHolder>{
         return drinkList.size();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
