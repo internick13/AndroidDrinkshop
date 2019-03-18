@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import galosoft.com.androiddrinkshop.Adapter.FavoriteAdapter;
@@ -21,6 +22,8 @@ public class FavoriteListActivity extends AppCompatActivity {
 
     RecyclerView recycler_fav;
     CompositeDisposable compositeDisposable;
+    FavoriteAdapter favoriteAdapter;
+    List<Favorite> localFavorites = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,18 @@ public class FavoriteListActivity extends AppCompatActivity {
         recycler_fav.setHasFixedSize(true);
 
         loadFavoritesItem();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFavoritesItem();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 
     private void loadFavoritesItem() {
@@ -50,9 +65,44 @@ public class FavoriteListActivity extends AppCompatActivity {
     }
 
     private void displayFavoriteItem(List<Favorite> favorites) {
-        FavoriteAdapter favoriteAdapter = new FavoriteAdapter(this, favorites);
+        localFavorites = favorites;
+        favoriteAdapter = new FavoriteAdapter(this, favorites);
         recycler_fav.setAdapter(favoriteAdapter);
     }
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
