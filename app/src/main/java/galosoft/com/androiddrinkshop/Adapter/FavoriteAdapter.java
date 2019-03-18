@@ -65,4 +65,76 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
             view_foreground = itemView.findViewById(R.id.view_foreground);
         }
     }
+
+    public void removeItem(int position) {
+        favoriteList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Favorite item, int position){
+        favoriteList.add(position, item);
+        notifyItemInserted(position);
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
