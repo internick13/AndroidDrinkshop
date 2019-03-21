@@ -48,6 +48,8 @@ public class FavoriteListActivity extends AppCompatActivity implements RecyclerI
 
         ItemTouchHelper.SimpleCallback simpleCallback  = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recycler_fav);
+
+
         loadFavoritesItem();
     }
 
