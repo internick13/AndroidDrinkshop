@@ -326,7 +326,9 @@ public class HomeActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.cart_menu) {
             //Create confirm dialog
-
+            return true;
+        } else if(id == R.id.search_menu){
+            startActivity(new Intent(HomeActivity.this, SearchActivity.class));
             return true;
         }
 

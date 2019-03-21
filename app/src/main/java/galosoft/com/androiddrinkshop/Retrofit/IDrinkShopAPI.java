@@ -48,5 +48,8 @@ public interface IDrinkShopAPI {
     @POST("upload.php")
     Call<String> uploadFile(@Part MultipartBody.Part phone, @Part MultipartBody.Part file);
 
+    @GET("getAllDrinks.php")
+    Observable<List<Drink>> getAllDrinks();
+
 
 }

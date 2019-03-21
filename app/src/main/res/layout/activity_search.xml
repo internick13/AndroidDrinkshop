@@ -4,6 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:padding="8dp"
     tools:context=".SearchActivity">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:layout_alignParentTop="true"
+            style="@style/MaterialSearchBarLight"
+            app:mt_speechMode="false"
+            app:mt_hint="Enter your drink"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/searchBar" />
+
+        <android.support.v7.widget.RecyclerView
+            android:scrollbars="vertical"
+            android:id="@+id/recycler_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/searchBar">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+    
 
 </android.support.constraint.ConstraintLayout>
