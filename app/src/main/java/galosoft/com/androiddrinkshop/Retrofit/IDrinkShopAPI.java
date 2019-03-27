@@ -51,5 +51,13 @@ public interface IDrinkShopAPI {
     @GET("getAllDrinks.php")
     Observable<List<Drink>> getAllDrinks();
 
+    @FormUrlEncoded
+    @POST("submitorder.php")
+    Call<String> submitOrder(@Field("price") float oderPrice,
+                                   @Field("orderDetail") String orderEetail,
+                                   @Field("comment") String comment,
+                                   @Field("address") String address,
+                                   @Field("phone") String phone);
+
 
 }
